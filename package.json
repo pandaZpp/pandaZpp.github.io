@@ -1,0 +1,20 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "blog by vue press",
+  "main": "index.js",
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "keywords": [
+    "blog",
+    "vuepress"
+  ],
+  "homepage": "https://jiqiangzhu.github.io/",
+  "author": "zjq",
+  "license": "ISC",
+  "devDependencies": {
+    "vuepress": "^2.0.0-beta.33"
+  }
+}
