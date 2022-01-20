@@ -3,7 +3,7 @@ module.exports = {
   lang: 'zh-CN',
   title: '我准备起飞',
   description: '起飞！唉~飞',
-
+  dest: 'dist',
   // 主题和它的配置
   theme: '@vuepress/theme-default',
   themeConfig: {
