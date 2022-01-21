@@ -1,11 +1,16 @@
+const { path } = require('@vuepress/utils')
+
 module.exports = {
   // 站点配置
   lang: 'zh-CN',
   title: '我准备起飞',
   description: '起飞！唉~飞',
-  // dest: 'dist',
   // 主题和它的配置
   theme: '@vuepress/theme-default',
+  clientAppEnhanceFiles: path.resolve(
+    __dirname,
+    './clientAppEnhance.js'
+  ),
   themeConfig: {
     navbar: [
       {
