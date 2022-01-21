@@ -11,7 +11,6 @@
     "blog",
     "vuepress"
   ],
-  "homepage": "https://jiqiangzhu.github.io/",
   "author": "zjq",
   "license": "ISC",
   "devDependencies": {
