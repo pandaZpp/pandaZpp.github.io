@@ -41,7 +41,7 @@ function integrateGitalk(router) {
       owner: 'jiqiangzhu',
       admin: ['jiqiangzhu', 'blairq-coding'],
       // id: 'comment',
-      id: fullPath.slice(1, 10),
+      id: fullPath.slice(1, -5),
       distractionFreeMode: false,
       language: 'zh-CN',
     });

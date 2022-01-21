@@ -14,10 +14,6 @@ module.exports = {
   themeConfig: {
     navbar: [
       {
-        text: '欢迎来到我的博客',
-        link: '/',
-      },
-      {
         text: 'HTML5、CSS3基础',
         link: '/basic/html5',
       },
