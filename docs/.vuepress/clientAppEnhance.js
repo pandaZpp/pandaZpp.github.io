@@ -9,12 +9,9 @@ function integrateGitalk(router) {
   scriptGitalk.src = 'https://unpkg.com/gitalk/dist/gitalk.min.js';
   document.body.appendChild(scriptGitalk);
   router.afterEach((to) => {
-    console.log('scriptGitalk', scriptGitalk);
     if (scriptGitalk.onload) {
-      console.log('is onload');
       loadGitalk(to);
     } else {
-      console.log('onload');
       scriptGitalk.onload = () => {
         loadGitalk(to);
       }
@@ -23,7 +20,6 @@ function integrateGitalk(router) {
 
   function loadGitalk(to) {
     let commentsContainer = document.getElementById('gitalk-container');
-    console.log('commentsContainer', commentsContainer);
     if (!commentsContainer) {
       commentsContainer = document.createElement('div');
       commentsContainer.id = 'gitalk-container';
