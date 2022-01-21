@@ -12,6 +12,7 @@ module.exports = {
     './clientAppEnhance.js'
   ),
   themeConfig: {
+    editLink: false,
     navbar: [
       {
         text: 'HTML5、CSS3基础',
@@ -41,7 +42,7 @@ module.exports = {
       '/basic/': [
         {
           text: 'HTML5、CSS3',
-          children: ['html5.md', 'css3.md']
+          children: ['html5.md', 'css3.md', 'flex.md']
         }
       ],
       '/javascript/': [
