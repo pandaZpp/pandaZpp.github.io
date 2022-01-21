@@ -40,7 +40,8 @@ function integrateGitalk(router) {
       repo: 'jiqiangzhu.github.io',
       owner: 'jiqiangzhu',
       admin: ['jiqiangzhu', 'blairq-coding'],
-      id: 'comment',
+      // id: 'comment',
+      id: fullPath.slice(1, -5),
       distractionFreeMode: false,
       language: 'zh-CN',
     });
