@@ -2,7 +2,7 @@
 
 
 
-## `Array.prototype.reduce`:fire:
+#### `Array.prototype.reduce`:fire:
 
 该方法接受两个参数，第一个是回调函数(该函数接受四个参数[累加器，当前值，当前索引(可选)，`reduce`的数组(可选)])，第二个是初始值
 ```js
@@ -21,7 +21,7 @@ Array.prototype.my_reduce = function (callback, ...rest) {
 }
 ```
 
-## `Array.prototype.flat`
+#### `Array.prototype.flat`
 该方法接受一个参数`depth`深度，该方法用来降低数组维度，该方法并不会改变原数组
 
 ```js
@@ -38,7 +38,7 @@ Array.prototype.my_flat = function (depth) {
 }
 ```
 
-## `Array.prototype.map`:star:
+#### `Array.prototype.map`:star:
    该方法接受两个参数`callback`&`thisArgs`，由于箭头函数没有`this`，所以若要想让第二个参数生效，不能使用箭头函数
 
 **箭头函数没有自己的this指针，通过 call() 或 apply() 方法调用一个函数时，只能传递参数（不能绑定this---译者注），他们的第一个参数会被忽略。（这种现象对于bind方法同样成立---译者注）**

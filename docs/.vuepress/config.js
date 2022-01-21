@@ -14,39 +14,50 @@ module.exports = {
   themeConfig: {
     navbar: [
       {
-        text: 'H5 C3基础',
+        text: '欢迎来到我的博客',
         link: '/',
       },
       {
+        text: 'HTML5、CSS3基础',
+        link: '/basic/html5',
+      },
+      {
         text: 'JS高级',
-        link: '/js/',
+        link: '/javascript/array-prototype',
       },
       {
         text: '计算机网络',
-        link: '/network/'
+        link: '/network/http'
       }
     ],
     darkMode: true, // 是否展示切换夜间模式按钮
     repo: 'https://github.com/jiqiangzhu/jiqiangzhu.github.io',
     repoLabel: 'Github Repo',
-    sidebarDepth: 3,
+    sidebarDepth: 1,
     sidebar: {
       '/': [
         {
-          text: 'H5、C3',
+          text: 'index',
+          collapsable: true,
           children: ['README.md']
         }
       ],
-      '/js/': [
+      '/basic/': [
+        {
+          text: 'HTML5、CSS3',
+          children: ['html5.md', 'css3.md']
+        }
+      ],
+      '/javascript/': [
         {
           text: 'JS高级',
-          children: ['README.md', 'ES6.md', '手撕Promise.md']
+          children: ['array-prototype.md', 'es6.md', 'my-promise.md']
         }
       ],
       '/network/': [
         {
           text: '计算机网络',
-          children: ['README.md']
+          children: ['http.md']
         }
       ]
     }
