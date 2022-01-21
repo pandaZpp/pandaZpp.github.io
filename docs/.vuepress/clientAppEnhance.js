@@ -39,7 +39,7 @@ function integrateGitalk(router) {
       clientSecret: 'fd60b763b43092a2a135137bea33a7496f8b77be', // come from github development
       repo: 'jiqiangzhu.github.io',
       owner: 'jiqiangzhu',
-      admin: ['jiqiangzhu'],
+      admin: ['jiqiangzhu', 'blairq-coding'],
       id: 'comment',
       distractionFreeMode: false,
       language: 'zh-CN',
