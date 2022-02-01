@@ -15,8 +15,5 @@
   "license": "ISC",
   "devDependencies": {
     "vuepress": "^2.0.0-beta.33"
-  },
-  "dependencies": {
-    "gitalk": "^1.7.2"
   }
 }
