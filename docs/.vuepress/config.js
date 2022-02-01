@@ -16,15 +16,15 @@ module.exports = {
     navbar: [
       {
         text: 'HTML5、CSS3基础',
-        link: '/basic/html5',
+        link: '/basic/',
       },
       {
         text: 'JS高级',
-        link: '/javascript/array-prototype',
+        link: '/javascript/',
       },
       {
         text: '计算机网络',
-        link: '/network/http'
+        link: '/network/'
       }
     ],
     darkMode: true, // 是否展示切换夜间模式按钮
