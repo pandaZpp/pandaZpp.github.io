@@ -59,4 +59,20 @@ module.exports = {
       ]
     }
   },
+  plugins: [
+    [
+      '@vuepress/plugin-search',
+      {
+        locales: {
+          '/': {
+            placeholder: 'Search',
+          },
+          '/zh/': {
+            placeholder: '搜索',
+          },
+        },
+        hotKeys: [], //空数组禁用快捷键
+      },
+    ],
+  ],
 }
