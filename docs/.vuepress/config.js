@@ -1,5 +1,5 @@
 const { path } = require('@vuepress/utils')
-
+require('@vuepress/plugin-search')
 module.exports = {
   // 站点配置
   lang: 'zh-CN',
