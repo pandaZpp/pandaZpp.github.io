@@ -1,4 +1,4 @@
-const { path } = require('@vuepress/utils')
+const {path} = require('@vuepress/utils')
 
 module.exports = {
   // 站点配置
@@ -15,16 +15,20 @@ module.exports = {
     editLink: false,
     navbar: [
       {
-        text: 'HTML5、CSS3基础',
-        link: '/basic/',
+        text: 'Web基础',
+        link: '/web/',
       },
       {
-        text: 'JS高级',
-        link: '/javascript/',
+        text: 'Vue相关',
+        link: '/vue/',
       },
       {
         text: '计算机网络',
         link: '/network/'
+      },
+      {
+        text: '后端',
+        link: '/api/'
       }
     ],
     darkMode: true, // 是否展示切换夜间模式按钮
@@ -32,29 +36,32 @@ module.exports = {
     repoLabel: 'Github Repo',
     sidebarDepth: 1,
     sidebar: {
-      '/': [
+      '/': [],
+      '/web/': [
         {
-          text: 'index',
-          collapsable: true,
-          children: ['README.md']
+          text: 'Web核心基础',
+          children: ['html5.md', 'css3.md', 'flex.md', 'grid.md',
+            'closure.md', 'js-prototype.md', 'array-prototype.md',
+            'es6.md', 'promise.md', 'my-promise.md', 'async-await.md',
+            'event-loop.md', 'interview-questions.md']
         }
       ],
-      '/basic/': [
+      '/vue/': [
         {
-          text: 'HTML5、CSS3',
-          children: ['html5.md', 'css3.md', 'flex.md']
-        }
-      ],
-      '/javascript/': [
-        {
-          text: 'JS高级',
-          children: ['array-prototype.md', 'es6.md', 'my-promise.md']
+          text: 'Vue2.x',
+          children: []
         }
       ],
       '/network/': [
         {
           text: '计算机网络',
           children: ['http.md']
+        }
+      ],
+      '/api/': [
+        {
+          text: '服务器相关',
+          children: []
         }
       ]
     }
