@@ -8,7 +8,7 @@
 
 >  `then、catch、Promise.resolve、Promise.reject、all、race、finally`
 
-#### :star:`Promise.prototype.then`方法实现
+### :star:`Promise.prototype.then`方法实现
 
 **:smile:then方法是Promise最重要的一个方法,后面的所有方法都要调用此方法**
 
@@ -104,7 +104,7 @@ class myPromise {
 }
 ```
 
-##### :question:`Promise`的`executor`里的代码是异步时该如何处理？
+### :question:`Promise`的`executor`里的代码是异步时该如何处理？
 
 ```typescript
 const promise = new myPromise((resolve, reject) => {
@@ -185,7 +185,7 @@ class myPromise {
 }
 ```
 
-##### :question:当`then`方法中返回的是一个`Promise`对象，能否在后面的`then`中拿到上面的值呢？
+### :question:当`then`方法中返回的是一个`Promise`对象，能否在后面的`then`中拿到上面的值呢？
 
 ```typescript
 promise.then((value:unknown) => {
@@ -260,7 +260,7 @@ then = (onResolve = myPromise.defaultOnResolve, onReject = myPromise.defaultOnRe
   }
 ```
 
-#### `Promise.prototype.catch`方法实现
+## `Promise.prototype.catch`方法实现
 
 由于`then`方法已经给了默认值，`catch`方法直接调用`then`方法即可，成功的回调函数设置成`undefined`即可
 
@@ -270,7 +270,7 @@ catch = (onReject = myPromise.defaultOnReject) => {
 }
 ```
 
-#### `Promise.resolve`方法实现
+## `Promise.resolve`方法实现
 
 **此方法属于Promise类的方法，通过类直接调用的，可以将Promise的状态直接设置为成功状态**
 
@@ -284,7 +284,7 @@ static resolve = (value: unknown) => {
 }
 ```
 
-#### `Promise.reject`方法实现
+## `Promise.reject`方法实现
 
 同`Promise.resolve`
 
@@ -296,7 +296,7 @@ static reject = (reason: any) => {
 }
 ```
 
-#### `Promise.all`方法实现
+## `Promise.all`方法实现
 
 简介：此方法接收一个`Promise`对象数组，当所有`Promise`的结果都为成功时，此方法才返回成功，否则返回失败
 
@@ -320,7 +320,7 @@ static all(promiseArr: Array<myPromise>): myPromise {
 }
 ```
 
-#### `Promise.race`方法实现
+## `Promise.race`方法实现
 
 与`Promise.all`方法相反，`race`方法会把最先返回的结果当作返回值
 
@@ -338,7 +338,7 @@ static race(promiseArr: Array<myPromise>): myPromise {
 }
 ```
 
-#### `Promise.prototype.finally`方法实现
+## `Promise.prototype.finally`方法实现
 
 此方法会在`then/catch`后面执行，:gift_heart:`ES2018`新增，在此之前，有些代码在`then和catch`中可能要重复书写，`finally`出现之后就很好的解决了这个问题
 
@@ -354,7 +354,7 @@ finally = (executor = new Function) => {
 }
 ```
 
-#### :star:`Promise.any`方法实现(:new:`ES2021新增`)
+## :star:`Promise.any`方法实现(:new:`ES2021新增`)
 
 此方法与`race`方法十分相似，不同的是，`race`只要有一个`reject`，就直接返回`reject`了，但是`any`是所有的都`reject`了才`reject`
 

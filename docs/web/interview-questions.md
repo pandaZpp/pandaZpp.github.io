@@ -100,6 +100,8 @@ function deepClone(target, weakMap = new WeakMap()) {
 
 防抖: 一定在事件触发 n 秒后才执行，如果你在一个事件触发的 n 秒内又触发了这个事件，**那我就以新的事件的时间为准**，n 秒后才执行，总之，就是要等你触发完事件 n 秒内不再触发事件，我才执行
 
+**js在某个数据类型前使用‘+’，这个操作目的是为了将该数据类型转换为Number类型**
+
 ```js
 function debounce(func, wait, immediate) {
   var timeout, result;
@@ -133,6 +135,40 @@ function debounce(func, wait, immediate) {
 参考[节流](https://github.com/mqyqingfeng/Blog/issues/26)
 
 节流: 如果你持续触发事件，每隔一段时间，只执行一次事件。
+
+```js
+// 时间戳
+function throttle1(fn, timestamp) {
+  // 当前时间
+  let previous = new Date();
+  return function () {
+    const args = arguments;
+    const _this = this;
+    const now = new Date();
+    if (now - previous > timestamp) {
+      fn.apply(_this, args);
+      previous = now;
+    }
+  };
+}
+
+// 定时器
+function throttle2(fn, delay) {
+  let timeout;
+  return function () {
+    const args = arguments;
+    const _this = this;
+    if (!timeout) {
+      timeout = setTimeout(() => {
+        fn.apply(_this, args);
+        timeout = null;
+      }, delay);
+    }
+  };
+}
+```
+
+优化版
 
 ```js
 function throttle(func, wait, options) {
