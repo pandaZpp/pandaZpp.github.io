@@ -10,6 +10,7 @@ function integrateGitalk(router) {
   document.head.appendChild(scriptGitalk)
 
   router.afterEach((to, from) => {
+    if (to.path === from.path) return
     if (scriptGitalk.onload) {
       setTimeout(() => {
         createGitalk(to.path)
