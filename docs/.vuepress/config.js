@@ -49,7 +49,11 @@ module.exports = {
       '/vue/': [
         {
           text: 'Vue2.x',
-          children: []
+          children: ['vue-basic.md', 'vue-router.md', 'vuex.md']
+        },
+        {
+          text: 'Vue3.x',
+          children: ['vue3-basic.md', 'vite.md']
         }
       ],
       '/network/': [

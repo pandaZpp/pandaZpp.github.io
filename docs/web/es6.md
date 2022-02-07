@@ -1,4 +1,4 @@
-# ES6+
+# ECMAScript2015+
 
 #### const let var
 
