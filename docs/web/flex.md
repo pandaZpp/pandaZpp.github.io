@@ -42,7 +42,7 @@ align-self: stretch | center | flex-start | flex-end | baseline;
 
 缩小只有在**主轴空间不足**的情况下使用有效
 
-常用法
+常用如下
 
 `flex: 1;`表示剩余空间所占的份数
 
