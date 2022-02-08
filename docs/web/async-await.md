@@ -29,6 +29,14 @@ async function demo() {
 
 async函数就是generator生成器函数的语法糖，await就是yield的改进版
 
+理解async原理之前先要搞懂生成器的概念
+
+>  \*  
+>
+> yield 
+
+
+
 **async函数对generator的改进**
 
 1. 内置执行器，不需要使用next()手动执行。
