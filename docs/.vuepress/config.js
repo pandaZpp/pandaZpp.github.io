@@ -34,13 +34,13 @@ module.exports = {
     darkMode: true, // 是否展示切换夜间模式按钮
     repo: 'https://github.com/jiqiangzhu/jiqiangzhu.github.io',
     repoLabel: 'Github Repo',
-    sidebarDepth: 1,
+    // sidebarDepth: 1,
     sidebar: {
       '/': [],
       '/web/': [
         {
           text: 'Web核心基础',
-          children: ['html5.md', 'css3.md', 'flex.md', 'grid.md',
+          children: ['index.md', 'html5.md', 'css3.md', 'flex.md', 'grid.md',
             'closure.md', 'js-prototype.md', 'array-prototype.md',
             'es6.md', 'promise.md', 'my-promise.md', 'async-await.md',
             'event-loop.md', 'interview-questions.md']
