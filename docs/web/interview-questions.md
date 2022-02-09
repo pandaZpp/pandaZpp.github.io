@@ -252,3 +252,20 @@ const _new = function(fn, ...args) {
 
 
 
+## 实现call,bind
+
+```js
+// call
+Function.prototype.call = function(thisArgs=window, ...args) {
+    thisArgs.fn = this; //这里的this就是调用fn的函数
+    return thisArgs.fn(...args) // 这时函数fn的this指向的就是thisArgs了
+}
+// bind
+Function.prototype.bind = function(thisArgs=window) {
+    thisArgs.fn = this;
+    return function (...args) {
+        return thisArgs.fn(...args)
+    }
+}
+```
+
