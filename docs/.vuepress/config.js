@@ -65,7 +65,7 @@ module.exports = {
       '/api/': [
         {
           text: '服务器相关',
-          children: []
+          children: ['express-deploy.md']
         }
       ]
     }

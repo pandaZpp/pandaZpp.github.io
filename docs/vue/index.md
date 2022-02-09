@@ -22,5 +22,8 @@
 
 
 
+### 搜索框组件核心
 
+事件执行顺序
+`mouseDown foucus click mouseUp`
 

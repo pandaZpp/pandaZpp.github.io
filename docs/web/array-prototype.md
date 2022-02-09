@@ -57,5 +57,103 @@ Array.prototype.my_map = function (callback, thisArgs) {
 }
 ```
 
-其余方法的实现也类似以上三种，这里不再赘述，多谢您的浏览，谢谢！
-    
+### `Array.prototype.fill`  
+
+```js
+Array.prototype.my_fill = function (value, start=0, end = this.length) {
+	for (let i = start; i < end; i++) {
+    this[i] = value
+  }
+}
+```
+
+### `Array.prototype.includes`:new:
+
+```js
+Array.prototype.my_includes = function (item) {
+	for (let i = 0; i < this.length; i++) {
+    if (this[i] === item || (isNaN(item) && isNaN(this[i]))) {
+      return true
+    }
+  }
+  return false
+}
+```
+
+### `Array.prototype.push`
+
+```js
+Array.prototype.my_push = function (...rest) {
+	const len = this.length;
+  for (let i = 0; i < rest.length; i++) {
+    this[i+len] = rest[i]
+  }
+  return this.length;
+}
+```
+
+### `Array.prototype.pop`
+
+```js
+Array.prototype.my_pop = function () {
+	const res = this[this.length - 1]
+  this.length --
+  return res
+}
+```
+
+### `Array.prototype.shift`
+
+```js
+Array.prototype.my_shift = function () {
+	const res = this[0]
+  for (let i = 0; i < this.length - 1; i++) {
+    this[i] = this[i+1]
+  }
+  this.length --
+  return res
+}
+```
+
+
+
+### `Array.prototype.unshift`
+
+```js
+Array.prototype.my_unshift = function (...rest) {
+	const arrayLen = this.length;
+  const restLen = rest.length;
+  for (let i = arrayLen + restLen - 1; i >= 0; i--) {
+    if (i >= restLen) {
+      this[i] = this[i - restLen]
+    } else {
+      this[i] = rest[i]
+    }
+  }
+  return this.length;
+}
+```
+
+
+
+### `Array.prototype.sort`
+
+```js
+Array.prototype.my_sort = function (fn) {
+  for (let i = 0; i < this.length - 1; i++) {
+    for (let j = 0; j < this.length - i - 1; j++) {
+      let val = fn(this[j], this[j + 1]);
+      if (val > 0) {
+        this[j] = this[j] + this[j + 1]
+        this[j + 1] = this[j] - this[j + 1]
+        this[j] = this[j] - this[j + 1]
+      }
+    }
+  }
+}
+```
+
+
+
+
+

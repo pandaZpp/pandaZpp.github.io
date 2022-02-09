@@ -73,3 +73,23 @@ Symbol，符号，可声明一个永远不会重复的标识，可当作对象�
 ## for-of
 
 对于已经实现了迭代器接口的对象，可以进行for-of遍历
+
+举例：
+
+```js
+const obj = {
+  [Symbol.iterator]: function() {
+    let index = 0
+    return {
+      next: function() {
+        return {value: index++, done: index > 5}
+      }
+    }
+  }
+}
+
+for (let item of obj) {
+  console.log('item', item); // 0 1 2 3 4
+}
+```
+
