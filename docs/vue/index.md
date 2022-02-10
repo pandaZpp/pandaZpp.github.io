@@ -1,8 +1,12 @@
-#### vue语法
+# Vue
 
 
 
-#### vue-router
+## vue语法
+
+
+
+## vue-router
 
 路由懒加载
 
@@ -12,7 +16,7 @@
 
 子路由
 
-#### vuex
+## vuex
 
 全局容器
 
@@ -26,4 +30,8 @@
 
 事件执行顺序
 `mouseDown foucus click mouseUp`
+
+
+
+
 

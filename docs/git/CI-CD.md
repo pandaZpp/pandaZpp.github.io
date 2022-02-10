@@ -96,3 +96,4 @@ echo 'server: buildding...' \
 
 
 
+日志埋点是怎么做的？
