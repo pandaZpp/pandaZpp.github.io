@@ -44,7 +44,6 @@ const [a0, a1, a2, {b}] = arr
 | padStart   | 方法用另一个字符串填充当前字符串(**如果需要的话，会重复多次**)，以便产生的字符串达到给定的长度 |
 | padEnd     | 用一个字符串填充当前字符串（如果需要的话则重复填充），返回填充后达到指定长度的字符串。从当前字符串的末尾（右侧）开始填充 |
 | at(index)  | 返回参数指定位置的字符，支持负索引                           |
-|            |                                                              |
 
 
 
@@ -52,9 +51,23 @@ promise请参考[Promise](./promise.html)
 
 ## set map weakmap weakset
 
-set集合，存储永远不会重复的数据
+set集合，存储永远不会重复的数据，可以存储undefined和NaN
+
+实例属性
+
+> size 返回set对象值的个数
+>
+> add 尾部添加元素
+>
+> clear 移除Set对象内部所有元素
+>
+> delete(value) 移除set对象中与value相同的元素，成功代表存在返回true，返回false表示不存在
+>
+> entries 返回一个迭代器对象
 
 map映射
+
+
 
 weakmap 弱映射，键必须是对象类型的
 
