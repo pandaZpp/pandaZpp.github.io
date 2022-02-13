@@ -12,7 +12,7 @@ Vue实例创建时，Vue会遍历data中的属性，用Object.defineProperty将�
 
 1. 需要observe的数据对象进行递归遍历，包括子属性对象的属性，都加上setter和getter这样的话，给这个对象的某个值赋值，就会触发setter，那么就能监听到了数据变化
 2. compile解析横板令，将模板中的变量替换成数据，然后初始化渲染页面视图，并将每个令对象的节点绑定更新函数，添加监听数据的订阅者，一旦数据有变动，收到通知，更新视图
-3. Watcher订阅名是observer和Compile之间通信的桥梁，主要做的事情是
+3. Watcher订阅者是observer和Compile之间通信的桥梁，主要做的事情是
    1. 在自身实例化时往属性订阅器(dep)里面添加自己
    2. 自身必须有一个update方法
    3. 待属性变动dep.notice()通知时，能调用自身的update()方法，并触发Compile中定的回调
@@ -26,7 +26,7 @@ Vue实例创建时，Vue会遍历data中的属性，用Object.defineProperty将�
 
 #### Object.defineProperty数据劫持的缺点
 
-对一些属性进行操作时，使用这种方法无法拦截，比如通过下标方式修改数组数据或者给对象新增属性，都不能触发组件的重新渲染，对于数组而言，大部分操作都无法拦截，知识Vue内部对此进行重写了
+对一些属性进行操作时，使用这种方法无法拦截，比如通过下标方式修改数组数据或者给对象新增属性，都不能触发组件的重新渲染，对于数组而言，大部分操作都无法拦截，只是Vue内部对此进行重写了
 
 Vue3.x使用Proxy对对象进行代理，可以完美监听到任何方式的数据改变，缺点时兼容性问题，Proxy属性ES6
 
@@ -69,8 +69,12 @@ Vue中更多的是复用组件，每个组件都要用自己单独的数据
 
 #### keep-alive实现
 
+> * include 字符串或者正则表达式，只有名称匹配的组件会被匹配
+> * exclude 字符串或者正则表达式，匹配的组件不会被缓存
+> * max 数字，最多可以缓存多少组件实例
+
 1. 获取keep-alive下第一个子组件的实例对象，通过它去获取这个组件的组件名
-2. 通过当前组件名去匹配原来include和exclude，判断当前组件是否需要缓存，不需要缓存，直接返回当前组件的实例vNode
+2. 通过当前组件名去匹配原来的include和exclude，判断当前组件是否需要缓存，不需要缓存，直接返回当前组件的实例vNode
 3. 需要缓存，判断他当前是否在缓存数组里面
    1. 存在，将原来位置上的key移除，同时将这个组件的key放到数组最后
    2. 不存在，将组件key放入数组，然后判断key数组是否超过max所设置的范围，超过，那么削减未使用时间最长的一个组件的key
@@ -81,6 +85,158 @@ Vue中更多的是复用组件，每个组件都要用自己单独的数据
 Vue的nextTick其本质是对Javascript执行原理EventLoop的一种应用
 
 nextTick核心是利用了如Promise、MutationObserver、setImmediate、setTimeout的原生JS方法来模拟对象的微/宏任务的实现，本质是为了利用JS的这些异步回调任务队列来实现Vue框架中自己的异步回调队列
+
+
+
+#### Vue中给data中的对象属性添加一个新属性会发生什么
+
+属性会添加，但是视图并未刷新，因为Vue实例创建时，新属性没有声明，故该属性不是响应式的属性，所以不会触发视图更新，可以使用Vue全局Api`$set()`
+
+`this.$set(obj, key, value)`
+
+#### Vue封装的数组方法
+
+响应式处理利用的是`Object.defineProperty`对数据进行拦截，这个方法不能监听到数组内部变化，数组长度变化，数组截取变化，所以需要对这些操作进行hack，让Vue能监听到其中的变化
+
+> * push()
+> * pop()
+> * shift()
+> * unshift()
+> * splice()
+> * sort()
+> * reverse()
+
+简单来说，重写了数组中的那些原生方法，首先获取到这个数组的__ob__，也就是他的Observer对象，如果有新的值，就调用observerArray继续对新的值观察变化`target.\__proto__ == arrayMethods`改变数组实例的原型，手动调用notify，通知渲染watcher，执行update
+
+```js
+// 缓存数组原型
+const arrayProto = Array.prototype;
+// 实现 arrayMethods.__proto__ === Array.prototype
+export const arrayMethods = Object.create(arrayProto);
+// 需要进行功能拓展的方法
+const methodsToPatch = [
+  "push",
+  "pop",
+  "shift",
+  "unshift",
+  "splice",
+  "sort",
+  "reverse"
+];
+
+/**
+ * Intercept mutating methods and emit events
+ */
+methodsToPatch.forEach(function(method) {
+  // 缓存原生数组方法
+  const original = arrayProto[method];
+  def(arrayMethods, method, function mutator(...args) {
+    // 执行并缓存原生数组功能
+    const result = original.apply(this, args);
+    // 响应式处理
+    const ob = this.__ob__;
+    let inserted;
+    switch (method) {
+    // push、unshift会新增索引，所以要手动observer
+      case "push":
+      case "unshift":
+        inserted = args;
+        break;
+      // splice方法，如果传入了第三个参数，也会有索引加入，也要手动observer。
+      case "splice":
+        inserted = args.slice(2);
+        break;
+    }
+    // 
+    if (inserted) ob.observeArray(inserted);// 获取插入的值，并设置响应式监听
+    // notify change
+    ob.dep.notify();// 通知依赖更新
+    // 返回原生数组方法的执行结果
+    return result;
+  });
+});
+```
+
+
+
+#### assets和static的区别
+
+相同点：两者都是存放静态资源文件，项目中所需要的资源文件，图片，字体图标，样式文件都可以放在这两个文件下
+
+不同点：assets打包时会进行压缩体积，代码格式化，static不会
+
+所以assets可以存放项目中需要的样式js文件，而第三方资源文件，比如iconfont可以存放在static中，因为这些都已经经过处理，不再需要处理，可以直接上传
+
+
+
+#### delete和Vue.delete删除数组的区别
+
+delete删除的元素变成了empty/undefined，其他元素键值不变
+
+Vue.delete直接删除了数组，改变了数组的键值
+
+#### SSR
+
+就是服务端渲染，在客户端把标签渲染成HTML的工作放在服务端完成，再把html直接返回给客户端
+
+优势：
+
+* 更好的SEO
+* 首屏加载速度更快
+
+缺点：
+
+* 只支持beforeCreate和created两个钩子
+* 更多的服务端负载
+* 需要一些外部扩展库时需要特殊处理
+
+#### mixin和mixins
+
+前者全局混入，影响每个组件实例
+
+后者对单独组件生效
+
+
+
+#### 组件通信
+
+1. props/$emit
+
+   父组件通过props向子组件传递数据，子组件通过$emit和父组件通信
+
+   * 父组件向子组件传值
+   * 子组件向父组件传值
+
+2. eventBus事件总线
+
+   事件总线适用于父子组件、非父子组件等之间的通信
+
+   * 创建事件中心管理组件之间的通信
+   * 发送事件
+   * 事件总线相当于一个桥梁，不同组件之间通过它通信
+
+3. 依赖注入provide/inject
+
+   1. provice 用来发送数据或方法
+   2. 用来接受数据或方法
+
+4. ref/$refs
+
+   * ref这个属性用在子组件上，引用指向了子组件的实例，可以通过实例来访问组件的数据和方法
+
+5. parent/$children
+
+   1. $parent可以让组件访问父组件的实例（访问的时上一级父组件的属性和方法）
+   2. $children可以让组件访问子组件的实例，但是$children并不能保证顺序，访问的数据也不是响应式的
+
+6. $attrs/$listeners
+
+   组件之间的跨代通信
+
+   inheritAttrs默认true，继承所有父组件属性除props之外的所有属性，inheritAttrs：false，只继承class属性
+
+   * $attrs: 继承所有父组件属性，除了prop传递的属性、class和style，一般用在子组件的子元素上
+   * $listeners: 该属性是一个对象，里面包含了作用在这个组件上的所有监听器，可以配合v-on='$listeners'，将所有的监听器指向这个组件的某个特定的子元素
 
 
 
