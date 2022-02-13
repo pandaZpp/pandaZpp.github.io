@@ -8,9 +8,19 @@ Vue实例创建时，Vue会遍历data中的属性，用Object.defineProperty将�
 
 #### 双向数据绑定原理:question:
 
-Vue.js采用数据劫持结合发布者-订阅者模式的方式，通过Object.defineProperty()来劫持各个属性的setter和getter，在数据变动时发布消息给订阅者，触发相应的监听回调
+**Vue采用数据劫持结合发布者-订阅者模式的方式，通过Object.defineProperty()来劫持各个属性的setter和getter，在数据变动时发布消息给订阅者，触发相应的监听回调**
 
 1. 需要observe的数据对象进行递归遍历，包括子属性对象的属性，都加上setter和getter这样的话，给这个对象的某个值赋值，就会触发setter，那么就能监听到了数据变化
+2. compile解析横板令，将模板中的变量替换成数据，然后初始化渲染页面视图，并将每个令对象的节点绑定更新函数，添加监听数据的订阅者，一旦数据有变动，收到通知，更新视图
+3. Watcher订阅名是observer和Compile之间通信的桥梁，主要做的事情是
+   1. 在自身实例化时往属性订阅器(dep)里面添加自己
+   2. 自身必须有一个update方法
+   3. 待属性变动dep.notice()通知时，能调用自身的update()方法，并触发Compile中定的回调
+4. MVVM作为数据绑定的入口，合observer、Compile和Watcher三者，通过Observer来监听自己的model数据变化，通过Compile来解析编译模板指令，最终利用Watcher搭起Observer和Compile之间的通信桥梁，达到数据变化->视图更新：视图交互变化（input）-> 数据mode变更的双向绑定效果
+
+
+
+
 
 
 
@@ -71,6 +81,22 @@ Vue中更多的是复用组件，每个组件都要用自己单独的数据
 Vue的nextTick其本质是对Javascript执行原理EventLoop的一种应用
 
 nextTick核心是利用了如Promise、MutationObserver、setImmediate、setTimeout的原生JS方法来模拟对象的微/宏任务的实现，本质是为了利用JS的这些异步回调任务队列来实现Vue框架中自己的异步回调队列
+
+
+
+#### 首屏加载时间
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
