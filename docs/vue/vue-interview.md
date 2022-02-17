@@ -18,7 +18,101 @@ Vue实例创建时，Vue会遍历data中的属性，用Object.defineProperty将�
    3. 待属性变动dep.notice()通知时，能调用自身的update()方法，并触发Compile中定的回调
 4. MVVM作为数据绑定的入口，合observer、Compile和Watcher三者，通过Observer来监听自己的model数据变化，通过Compile来解析编译模板指令，最终利用Watcher搭起Observer和Compile之间的通信桥梁，达到数据变化->视图更新：视图交互变化（input）-> 数据mode变更的双向绑定效果
 
+#### 简易版双向绑定实现
 
+```js
+// 数据劫持+发布订阅模式
+
+// 遍历使用Object.defineProperty给对象每个属性添加getter和setter
+function observe(data) {
+  typeof data === "object" &&
+    Object.keys(data).forEach((key) => {
+      defineReactive(data, key, data[key]);
+    });
+}
+
+function defineReactive(data, key, value) {
+  // 若value仍是对象，也需要添加getter和setter
+  observe(value);
+  const dep = new Dep();
+  Object.defineProperty(data, key, {
+    configurable: true,
+    enumerable: true,
+    get() {
+      if (Dep.target) {
+        dep.addSub(Dep.target);
+      }
+      return value;
+    },
+    set(newValue) {
+      value = newValue;
+      console.log(`属性${key}被监听了，当前值为：${value}`);
+      dep.notify();
+    },
+  });
+}
+
+class Dep {
+  constructor() {
+    this.subs = [];
+  }
+  // 添加订阅者
+  addSub(sub) {
+    this.subs.push(sub);
+  }
+  // 通知订阅者
+  notify() {
+    this.subs.forEach((sub) => {
+      sub.update();
+    });
+  }
+  // 用来缓存观察者
+  static target = null;
+}
+
+class Watcher {
+  constructor(vm, exp, cb) {
+    this.vm = vm;
+    this.exp = exp;
+    this.cb = cb;
+    this.value = this.get();
+  }
+  get() {
+    // 添加观察者
+    Dep.target = this;
+    const value = this.vm.data[this.exp];
+    Dep.target = null;
+    return value
+  }
+  update() {
+    const value = this.vm.data[this.exp]
+    const oldValue = this.value
+    if (value !== oldValue) {
+      this.value = value
+      this.cb.call(this.vm, value, oldValue)
+    }
+  }
+}
+
+function SelfVue(data, el, exp) {
+  this.data = data;
+  observe(this.data)
+  const element = document.querySelector(el);
+  element.innerHTML = this.data[exp]
+  new Watcher(this, exp, (value, oldValue) => {
+    element.innerHTML = value
+  })
+}
+
+const selfVue = new SelfVue({
+  name: 'hello, world'
+}, '#app', 'name')
+
+setTimeout(()=>{
+  selfVue.data.name = 'two seconds later....'
+}, 2000)
+
+```
 
 
 

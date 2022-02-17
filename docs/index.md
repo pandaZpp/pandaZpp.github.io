@@ -15,7 +15,7 @@
 * [更多...](/web/)
 
 ### Vue
-#### [vue2基础语法](/vue-basic.html)
+#### [vue常见面试题](/vue/vue-interview.html)
 
 
 
