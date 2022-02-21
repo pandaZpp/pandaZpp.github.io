@@ -116,6 +116,98 @@ setTimeout(()=>{
 
 
 
+##### ts版本
+
+```tsx
+// 双向绑定原理
+function observe(data: any) {
+  typeof data === 'object' && Object.keys(data).forEach((key) => {
+    defineReactive(data, key, data[key])
+  })
+}
+
+function defineReactive(data, key, value) {
+  typeof value === 'object' && observe(value);
+  const dep = new Dep()
+  Object.defineProperty(data, key, {
+    configurable: true,
+    enumerable: true,
+    get() {
+      if (Dep.target) {
+        dep.addSub(Dep.target);
+      }
+      return value;
+    },
+    set(newValue) {
+      value = newValue;
+      dep.notify();
+    }
+  })
+}
+
+class Dep {
+  subs: Array<any>;
+
+  constructor() {
+    this.subs = [];
+  }
+
+  notify() {
+    this.subs.forEach(sub => {
+      sub.update()
+    })
+  }
+
+  addSub(sub) {
+    this.subs.push(sub)
+  }
+
+  static target: any = null
+}
+
+class Watcher {
+  value: any = ''
+
+  constructor(public vm: any, public exp: string, public cb: Function) {
+    this.vm = vm;
+    this.exp = exp;
+    this.cb = cb;
+    this.value = this.get()
+  }
+
+  get() {
+    Dep.target = this;
+    const value = this.vm.data[this.exp]
+    Dep.target = null;
+    return value;
+  }
+
+  update() {
+    const value = this.vm.data[this.exp];
+    const oldValue = this.value;
+    if (value !== oldValue) {
+      this.value = value;
+      this.cb(this.vm, value, oldValue)
+    }
+  }
+}
+
+class SelfVue {
+  constructor(public data: any, public el: string, public exp: string) {
+    this.data = data;
+    observe(this.data);
+    const element = document.querySelector(el)!;
+    element.innerHTML = this.data[this.exp];
+    new Watcher(this, exp, (vm, value, oldValue) => {
+      element.innerHTML = value;
+      console.log('oldValue', oldValue)
+      console.log('vm', vm)
+      console.log('value', value)
+    })
+  }
+}
+```
+
 
 
 #### Object.defineProperty数据劫持的缺点
@@ -340,13 +432,197 @@ Vue.delete直接删除了数组，改变了数组的键值
 
 
 
+### 十个请求，放入请求池，请求池一次性只能放入三个
+
+```ts
+
+interface taskType {
+  task: Function,
+  run: Boolean
+}
+
+class Queue {
+  allTask: Array<Function> = [];
+  runTask: Array<taskType> = []
+
+  constructor(...rest: Array<Function>) {
+    //初始化所有任务
+    this.allTask = rest;
+    // 放入请求池的三个初始任务
+    const initTask = this.allTask.splice(0, 3);
+    //添加run标识
+    this.runTask = initTask.map(task => {
+      return {
+        task,
+        run: false
+      }
+    })
+    //执行
+    this.run();
+  }
+
+  run() {
+    this.allTask.length > 0 && this.runTask.forEach((item, index) => {
+      // 已经执行过的task不再执行
+      if (item.run) return;
+      item.run = true;
+      item.task().then((value: unknown) => {
+        console.log('value', value)
+        delete this.runTask[index]
+        this.runTask[index] = {
+          task: this.allTask.shift()!,
+          run: false
+        }
+        this.run()
+      })
+    })
+  }
+}
+
+//以下是测试代码
+function fun1() {
+  return new Promise(resolve => {
+    setTimeout(()=>{
+      resolve(fun1.name)
+    }, 1000)
+  })
+}
+function fun2() {
+  return new Promise(resolve => {
+    setTimeout(()=>{
+      resolve(fun2.name)
+    }, 2000)
+  })
+}
+function fun3() {
+  return new Promise(resolve => {
+    setTimeout(()=>{
+      resolve(fun3.name)
+    }, 300)
+  })
+}
+
+function fun4() {
+  return new Promise(resolve => {
+    setTimeout(()=>{
+      resolve(fun4.name)
+    }, 1000)
+  })
+}
+function fun5() {
+  return new Promise(resolve => {
+    setTimeout(()=>{
+      resolve(fun5.name)
+    }, 1000)
+  })
+}
+function fun6() {
+  return new Promise(resolve => {
+    setTimeout(()=>{
+      resolve(fun6.name)
+    }, 300)
+  })
+}
+
+new Queue(fun1, fun2, fun3, fun4, fun5, fun6)
+
+```
+
+### promise async await面试题
+
+```tsx
+
+// 说出以前代码输出顺序
+async function async1() {
+  console.log('A');
+  // await后面的代码实际上相当于.then(() => {...})
+  await async2();
+  console.log('B');
+  //相当于以下代码
+  // (async2 as any).then(() => {
+  //   console.log('B')
+  // })
+}
+
+async function async2() {
+  console.log('C');
+}
+
+setTimeout(() => {
+  console.log('D')
+})
+
+console.log('E');
+
+async1()
+
+new Promise((resolve) => {
+  console.log('F')
+  resolve(1)
+}).then(() => {
+  console.log('G')
+})
+```
+
+### 实现一个EventBus
+
+```tsx
+// 实现一个EventBus
+class EventBus {
+  cbs: any = {}
+
+  on(type: string, cb: Function) {
+    this.cbs[type] = this.cbs[type] || [];
+    this.cbs.push({cb, once: false})
+  }
+
+  emit(name: string, ...rest: any) {
+    Array.isArray(this.cbs[name]) && this.cbs[name].forEach((item, index) => {
+      item.cb && item.cb()
+      if (item.once) {
+        delete item.cb
+      }
+    })
+  }
+
+  once(type: string, cb: Function) {
+    this.cbs[type] = this.cbs[type] || [];
+    this.cbs.push({cb, once: true})
+  }
+
+  clear() {
+    this.cbs.splice(0, this.cbs.length)
+  }
+}
+```
 
 
 
+### 递归过滤器
 
-
-
-
+```ts
+function filter(array: Array<any>, target: string): Array<any> {
+  const result: Array<any> = []
+  for (let i = 0; i < array.length; i++) {
+    // name直接等于target，直接返回当前项
+    if (array[i].name === target) {
+      result.push(array[i]);
+      // name不等于target，children length大于0
+    } else if (array[i].children && array[i].children.length > 0) {
+      // 递归，查询children中是否含有目标值
+      const res = filter(array[i].children, target);
+      //含有目标值，要剔除非目标值的项
+      if (res.length > 0) {
+        result.push({
+          name: array[i].name,
+          children: res
+        })
+      }
+    }
+  }
+  return result;
+}
+```
 
 
 
