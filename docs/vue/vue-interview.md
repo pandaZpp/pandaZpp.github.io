@@ -1,5 +1,39 @@
 # VUE常见面试题
 
+#### Vue的data为什么是函数而非对象
+
+是对象的话，多个地方使用到，改一个地方会影响到多个地方
+
+#### computed和watch的区别
+
+**computed** 有缓存，不支持异步，声明的变量无需在data中声明，多个值的改变影响一个值
+
+**watch** handler/deep/immediate 支持异步操作，变量需存在vm实例中，一个值的改变影响多个值
+
+#### v-for key
+
+diff算法
+
+#### v-for v-if
+
+
+
+#### 组件通信方式
+
+- props $emit
+- provide/inject
+- $attrs
+- eventbus
+- ref/refs
+
+#### vuex
+
+
+
+
+
+
+
 #### Vue的基本原理
 
 Vue实例创建时，Vue会遍历data中的属性，用Object.defineProperty将他们转为getter/setter，在内部追踪相关依赖，属性被访问和修改时通知变化，每个组件实例都有相应的watcher程序实例，会在组件渲染的过程中把属性记录为依赖，当依赖项的setter被调用时，会通知watcher重新计算，从而使它关联的组件得以更新

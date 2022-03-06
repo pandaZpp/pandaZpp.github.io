@@ -29,6 +29,10 @@ module.exports = {
       {
         text: '后端',
         link: '/api/'
+      },
+      {
+        text: '2022面经',
+        link: '/interview/'
       }
     ],
     darkMode: true, // 是否展示切换夜间模式按钮
@@ -70,6 +74,12 @@ module.exports = {
         {
           text: '服务器相关',
           children: ['express-deploy.md']
+        }
+      ],
+      '/interview/': [
+        {
+          text: '2022常见面试题',
+          children: ['basic.md', 'code.md', 'framework.md', 'browser.md', 'optimize.md', 'composite.md']
         }
       ]
     }
