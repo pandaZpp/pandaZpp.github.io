@@ -183,6 +183,8 @@ less及sass等预编译语言中使用/deep/
 
 使用GPU加速，不会引起重绘回流
 
+### display和visibility的区别
+
 ## JS篇
 
 ### 介绍一下`event-loop`事件循环
@@ -305,28 +307,185 @@ return new Promise(resolve => {
 
 ### async和await
 
+是现代异步编程的最终解决方案，可以以写同步代码的形式写异步代码，易读性非常强
 
+`async`是生成器`generator`的语法糖，async用于修饰函数，将返回一个promise对象，await与yield关键字类似，后面最好跟一个promise，会直接拿到promise的值，若promise为rejected状态，需要使用try/catch包括，捕获对应的错误信息，如果await后面跟的不是promise，那么将值作为成功状态的promise值即可，await语句后面的语句相当于promise.then()，如下方代码所示。
+
+```js
+async function async1() {
+  console.log('A');
+  await async2()
+  console.log('B');
+}
+
+function async1() {
+    console.log('A');
+    async2().then(value => {
+        console.log('B')
+    })
+}
+```
 
 ### JavaScript的几种继承模式
 
-### const和let
+#### 原型链继承
+
+原型链继承，每个对象都有一个原型，可以从原型上继承属性方法，这就是原型链继承
+
+缺点：
+
+​	对于引用类型的值来说，多个继承同一个原型，改一发动全身，各自之间是不独立的。如下方代码所示
+
+```js
+function SuperType() {
+    this.property = true;
+    this.likes = ['runing', 'basketball', 'baseball']
+}
+SuperType.prototype.getSuperValue = function() {
+    return this.property;
+}
+function SubType() {
+    this.subproperty = false
+}
+// 继承SuperType
+SubType.prototype = new SuperType();
+SubType.prototype.getSubValue = function() {
+    return this.subproperty;
+}
+const sub = new SubType();
+const sub1 = new SubType();
+sub.likes.push('swim')
+// 修改了sub，sub1也会收到影响
+```
+
+#### 盗用函数继承
+
+在函数内部调用别的构造函数，使用call改变this指向。
+
+缺点：
+
+​	必须在构造函数中定义方法，因此函数不能重用，子类也不能访问父类原型上定义的方法，因此所有类型只能使用构造函数模式
+
+```js
+function SuperType() {
+    this.likes = ['run', 'basketball'];
+}
+function SubType(age) {
+    SuperType.call(this);
+    this.age = age;
+}
+
+```
+
+#### 组合继承
+
+​	组合继承是JS中最常用的继承方式，综合原型链和盗用构造函数，思路是使用原型链继承原型上的属性和方法，通过盗用构造函数继承实例属性。这样既可以把方法定义在原型上以实现重用，又可以让每个实例都有自己的属性
+
+```js
+function SuperType(name) {
+    this.name = name;
+    this.colors = ['red', 'blue', 'green']
+}
+SuperType.prototype.sayName = function() {
+    console.log(this.name)
+}
+function SubType(name, age) {
+    // 继承属性
+    SuperType.call(this, name);
+    this.age = age;
+}
+// 继承方法
+SubType.prototype = new SuperType();
+SubType.prototype.sayAge = function() {
+    console.log(this.age)
+}
+```
+
+#### 原型式继承
+
+```js
+function object(o) {
+    // 创建一个临时构造函数
+    function F() {}
+    F.prototype = o;
+    return new F();
+}
+```
+
+### var、const和let
+
+const和let是es6新增的两个变量声明关键字，两者都有暂时性死区，声明之前不可被访问，都有块级作用域，声明后的变量不可重复被声明，const修饰的是一个常量，let修饰的可以被修改
 
 ### bigint symbol
 
+都是新增的变量类型
+
+biging是一种内置对象，提供一种表发来表示大于`2^53-1`的整数，它可以表示任意大的整数。
+
+不能用于Math对象中的方法，不能和任何Number实例混合运算，两者必须转换成同一种类型，在两种类型来回转换时要小心，因为bigint变量在转换成Number变量时可能会丢失精度
+
+使用`Symbol(xx)`会返回一个独一无二的值
+
+`Symbol.iterator`作为迭代器的键
+
 ### 常见的类数组有哪些？如何转为数组
 
-### 扩展运算符
+arguments对象和nodelist
+
+`...和Array.from()`
+
+`Array.prototype.slice.call(arguments) [].slice.call(arguments)`
+
+### 扩展运算符，剩余参数
+
+... 用于数组对象结构
+
+...rest修饰函数剩余的参数，是一个数组
 
 ### new的时候发生了什么
 
-### 扩展运算符
+1. 创建一个空对象
+2. 空对象的`__proto__`属性指向构造函数的`prototype`
+3. 执行构造函数内部代码
+4. 构造函数返回值如果是一个对象就返回这个对象，否则返回第一步创建的对象
 
 ### 介绍一下浅拷贝和深拷贝
 
+浅拷贝对于原始值是新增，对于引用类型的值，只是拷贝了引用，即拷贝的引用值有修改，那么源值也会受到影响
+
+深拷贝对于所有属性方法都是一次新增，改新值不会影响到旧值
+
 ### 如何实现一个深拷贝
 
-### 介绍一下call/apply/bind
+```typescript
+function _completeDeepClone (target, map = new Map()){
+  // 补全代码
+  if (!(target instanceof Object)) return target;
+  const constructor = target.constructor()
+  if (/^(Function|RegExp|Date|Map|Set)$/i.test(constructor.name)) return new constructor(target)
+  if (map.get(target)) return map.get(target)
+  map.set(target, true)
+  // const cloneTarget = Array.isArray(target) ? [] : {}
+  const descs = Object.getOwnPropertyDescriptors(target);
+  const cloneTarget = Object.create(Object.getPrototypeOf(target), descs)
+  
+  for (let prop in target) {
+      if (target.hasOwnProperty(prop)) {
+          cloneTarget[prop] = _completeDeepClone(target[prop], map)
+      }
+  }
+  return cloneTarget
+}
+```
+
+### 介绍一下`call/apply/bind`
+
+都是用来改变`this`指向的，call和apply都是直接执行的，两者的参数传递不一致，apply是数组形式，call是剩余参数，bind是返回一个已绑定的函数，再次调用才会执行
 
 ### 介绍一下浏览器的垃圾回收机制
 
 ### 导致内存泄漏的情况有哪些
+
+
+
+### typescript的type和interface的区别
