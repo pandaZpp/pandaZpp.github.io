@@ -42,7 +42,25 @@
 
 ### 清除浮动的几种方式
 
+浮动指非ID浏览器下，容器不设高度且子元素浮动时，容器高度不能被内容撑开，此时，内容会溢出到容器外面而影响布局，这种现象被称为浮动（溢出）
 
+工作原理：
+
+* 浮动元素脱离文档流，不占据空间
+* 浮动元素碰到包含它的边框或者其他浮动元素的边框停留
+
+引起的问题：
+
+* 父元素高度无法被撑开，影响与父元素同级的元素
+* 与浮动元素同级的非浮动元素会跟随其后
+* 若浮动的元素不是第一个元素，则该元素之前的元素也要浮动，否则会影响页面显示结构
+
+清除浮动方式
+
+* 给父级定义height属性
+* 浮动元素之后添加一个空的div标签，添加clear:both样式
+* 包含浮动元素的父级标签添加overflow: hidden或者auto
+* 使用:after
 
 ### 重绘和回流
 
@@ -108,8 +126,6 @@ less及sass等预编译语言中使用/deep/
 8. **页面样式属性**：size、page-break-before、page-break-after
 9. **声音样式属性**：pause-before、pause-after、pause、cue-before、cue-after、cue、play-during
 
-
-
 ### 可以被继承的css属性
 
 1. 字体系列属性
@@ -165,21 +181,131 @@ less及sass等预编译语言中使用/deep/
 
 ### css3的transform会引起重绘还是回流
 
-GPU加速，不会引起重绘回流
+使用GPU加速，不会引起重绘回流
 
 ## JS篇
 
-### 介绍一下eventloop
+### 介绍一下`event-loop`事件循环
+
+JavaScript是一门单线程语言(JavaScript主要用途是与用户互动，以及操作DOM，因此决定了这只能是单线程)
+
+#### 任务队列
+
+任务可以分为两种，同步任务(synchronous)和异步任务(asynchronous)
+
+同步任务：只有前一个任务执行完毕，才能执行下一个任务
+
+异步任务：不进入主线程，进入任务队列(task queue)，只有任务队列通知主线程，异步任务可以执行了，该任务才会进入主线程执行
+
+#### **执行栈(execution context stack)**
+
+1. 所有同步任务都在主线程执行，形成一个执行栈
+
+2. 主线程之外，存在一个任务队列，只要异步任务有了运行结果，就在任务队列放置一个事件
+
+3. 一旦执行栈中所有同步任务执行完毕，系统就会读取任务队列，异步任务进入执行栈，执行
+
+主线程不断重复这三个步骤
+
+#### Event Loop
+
+主线程从任务队列中读取事件，这个过程是循环不断的，所以这种运行机制又称为Event Loop（事件循环）
+
+![Event Loop](../web/assets/img/event-loop.png)
+
+#### requestAnimationFrame
+
+requestAnimationFrame()方法接收一个参数，此参数是一个要在重绘屏幕前调用的函数。这个函数就是修改DOM样式以反映下一次重绘有什么变化的地方，为了实现动画循环，可以把多个requestAnimationFrame调用串联起来
+
+当浏览器的显示频率刷新的时候，此函数会被执行，**requsetAnimationFrame的调用时间是跟着系统的刷新频率走的**
+
+回调函数有一个参数，是一个相对的时间毫秒值，表示当前的刷新时间。
 
 ### 原型和原型链
 
+每个对象都有对应的原型，实例对象的`__proto__`指向了构造函数的`prototype`
+
+通过改变原型指向，可以改变对象的原型，由此形成的链式结构就是原型链
+
+```js
+function SuperType() {
+    this.subs = [1, 2, 3]
+}
+function SubType() {}
+SubType.prototype = new SuperType();
+```
+
 ### 闭包原理及其用途
+
+```js
+function demo() {
+    let a = 111;
+    return function fn() {
+        return ++a;
+    }
+}
+```
+
+函数demo里有一个变量a，函数执行结束之后，会返回一个函数fn，fn函数内部调用了变量a，这时就形成了闭包，此时函数执行完毕之后这块执行期上下文就不会被销毁，因为fn函数保持了对a变量的引用，所以不会被垃圾回收
+
+- **所以需要合理使用闭包，否则会造成内存泄漏**
+- 闭包提供了外部访问函数内部变量的能力
+- 防止全局变量被污染
 
 ### 迭代器与生成器
 
+ES6新增了迭代器的概念，实现Iterable接口需要支持迭代的自我识别能力和创建实现Iterator接口的对象的能力，在ES中，必须暴漏一个属性作为默认迭代器，这个属性必须使用特殊的Symbol.iterator作为键，通过调用next方法在可迭代对象中遍历数据，每次调用成功，都会返回一个IteratorResult对象，其中value和done，done是true时，表示迭代结束了
+
+```js
+function * demo() {
+    yield 1
+    yield 2
+    yield 3
+}
+```
+
+上方demo函数就是一个生成器，demo执行完毕会生成一个迭代器，函数执行到yield关键字会暂停，只有执行next方法才会继续执行
+
 ### promise
 
+promise是现代异步编程的一种新的解决方式，解决了以往回调函数嵌套过深的问题（回调地狱），使用的是promise的链式调用方式
+
+```js
+function(fn() {
+    fn1() {
+        fn2(){
+            fn3(){
+                fn4(){
+                    fn5(){
+                        fn6(){
+                            //....
+                        }
+                    }
+                }
+            }
+        }
+    }
+})
+// promise形式
+return new Promise(resolve => {
+    resolve(1)
+}).then(value => {
+    return value
+}).then(value => {
+    return value
+})
+// ...
+```
+
+
+
+[promise用法](../web/promise.html)
+
+[手撕promise源码](../web/my-promise.html)
+
 ### async和await
+
+
 
 ### JavaScript的几种继承模式
 
