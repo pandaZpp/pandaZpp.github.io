@@ -70,6 +70,12 @@
 
 浏览器维护了一个队列，会把所有引起回流、重绘的操作放入这个队列，队列中任务到了一定数量或者到了一定时间间隔，浏览器就会清空队列，进行批处理，这样会将多次重绘回流变成一此重绘回流
 
+### inline和block
+
+1. 行内级和块级
+2. 行内级不可设置高度宽度，是文字的高度
+3. 块级会占据一行可以设置高度宽度
+
 ### 盒模型
 
 主要分为两种，标准盒模型和IE怪异盒模型
@@ -489,3 +495,80 @@ function _completeDeepClone (target, map = new Map()){
 
 
 ### typescript的type和interface的区别
+
+
+
+
+
+
+
+### iframe的替代方案有了解过哪些
+
+1. object标签
+
+   ```html
+   <object data="https://https://www.baidu.com" width="400" height="300" type="text/html">
+       Alternative Content
+   </object>
+   ```
+
+   
+
+2. embed
+
+   ```html
+   <embed src="https://www.baidu.com" width=200 height=200 />
+   ```
+
+   
+
+### 介绍一下RSA和MD5
+
+RSA公钥是被公开的，要想得出明文，必须使用私钥破解
+
+MD5加密可用来将密文保存在数据库，在认证时计算出密文判断二者是否一致
+
+### proxy除了代理还能做什么，监听数据除了proxy和，defineProperty还能如何做
+
+1. mutation observe
+
+### **`common JS`和`esmoduleJS`的区别**
+
+1. CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。
+2. CommonJS 模块是运行时加载，ES6 模块是编译时输出。
+
+### 实现一个小驼峰命名的函数
+
+```js
+function solution(str) {
+  const arr = str.split('');
+  console.log(arr);
+  for (let i = 0; i < arr.length; i++) {
+    if (i === 0) {
+      arr[i] = arr[i].toLowerCase()
+    } else if (arr[i] === '_'){
+      arr.splice(i, 1);
+      arr[i] = arr[i].toUpperCase()
+      console.log('str', str);
+    }
+  }
+  return arr.join('');
+}
+```
+
+### 实现promise.finally
+
+```typescript
+const finally = (executor = new Function) => {
+    return this.then((value: unknown) => { 
+        return myPromise.resolve(executor()).then(() => value) // 为了将值继续传递供链式调用
+    }, (reason: any) => {
+        return myPromise.resolve(executor()).then(() => { //为了将值继续传递供链式调用
+            throw reason
+        })
+    })
+}
+```
+
+
+
