@@ -1,0 +1,1 @@
+const t={key:"v-0a01295a",path:"/vue/vite.html",title:"Vite",lang:"zh-CN",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:1644225164e3,contributors:[{name:"Jiqiangzhu",email:"Jiqiang.zhu01@gmail.com",commits:1}]},filePathRelative:"vue/vite.md"};export{t as data};

@@ -1,0 +1,1 @@
+const e={key:"v-161a5409",path:"/api/node.html",title:"",lang:"zh-CN",frontmatter:{},excerpt:"",headers:[{level:2,title:"\u2B50Node",slug:"node",children:[]}],git:{updatedTime:1648470472e3,contributors:[{name:"Blair",email:"to_zjq_vip@163.com",commits:1}]},filePathRelative:"api/node.md"};export{e as data};

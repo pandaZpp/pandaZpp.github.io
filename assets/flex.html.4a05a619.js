@@ -1,0 +1,1 @@
+const e={key:"v-abf595a8",path:"/web/flex.html",title:"flex\u5E03\u5C40",lang:"zh-CN",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:1644329916e3,contributors:[{name:"JiqiangZhu",email:"jiqiang.zhu01@gmail.com",commits:1},{name:"Jiqiangzhu",email:"Jiqiang.zhu01@gmail.com",commits:1}]},filePathRelative:"web/flex.md"};export{e as data};

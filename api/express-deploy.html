@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="generator" content="VuePress 2.0.0-beta.36">
+    <style>
+      :root {
+        --c-bg: #fff;
+      }
+      html.dark {
+        --c-bg: #22272e;
+      }
+      html, body {
+        background-color: var(--c-bg);
+      }
+    </style>
+    <script>
+      const userMode = localStorage.getItem('vuepress-color-scheme');
+			const systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+			if (userMode === 'dark' || (userMode !== 'light' && systemDarkMode)) {
+				document.documentElement.classList.toggle('dark', true);
+			}
+    </script>
+    <title>Express部署到腾讯云服务器 | 我准备起飞</title><meta name="description" content="起飞！唉~飞">
+    <link rel="modulepreload" href="/assets/app.0f26bafb.js"><link rel="modulepreload" href="/assets/express-deploy.html.7abb394d.js"><link rel="modulepreload" href="/assets/express-deploy.html.9c19e2e3.js"><link rel="modulepreload" href="/assets/plugin-vue_export-helper.21dcd24c.js">
+    <link rel="stylesheet" href="/assets/style.28f5ce32.css">
+  </head>
+  <body>
+    <div id="app"><!--[--><div class="theme-container"><!--[--><header ref_key="navbar" class="navbar"><div class="toggle-sidebar-button" title="toggle sidebar" aria-expanded="false" role="button" tabindex="0"><div class="icon" aria-hidden="true"><span></span><span></span><span></span></div></div><span><a href="/" class=""><!----><span class="site-name">我准备起飞</span></a></span><div class="navbar-items-wrapper" style=""><!--[--><!--]--><nav class="navbar-items can-hide"><!--[--><div class="navbar-item"><a href="/web/" class="" aria-label="Web基础"><!--[--><!--]--> Web基础 <!--[--><!--]--></a></div><div class="navbar-item"><a href="/vue/" class="" aria-label="Vue相关"><!--[--><!--]--> Vue相关 <!--[--><!--]--></a></div><div class="navbar-item"><a href="/network/" class="" aria-label="计算机网络"><!--[--><!--]--> 计算机网络 <!--[--><!--]--></a></div><div class="navbar-item"><a href="/api/" class="router-link-active" aria-label="后端"><!--[--><!--]--> 后端 <!--[--><!--]--></a></div><div class="navbar-item"><a href="/interview/" class="" aria-label="2022面经"><!--[--><!--]--> 2022面经 <!--[--><!--]--></a></div><div class="navbar-item"><a class="external-link" href="https://github.com/jiqiangzhu/jiqiangzhu.github.io" rel="noopener noreferrer" target="_blank" aria-label="Github"><!--[--><!--]--> Github <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></div><!--]--></nav><!--[--><!--]--><button class="toggle-dark-button" title="toggle dark mode"><svg style="" class="icon" focusable="false" viewBox="0 0 32 32"><path d="M16 12.005a4 4 0 1 1-4 4a4.005 4.005 0 0 1 4-4m0-2a6 6 0 1 0 6 6a6 6 0 0 0-6-6z" fill="currentColor"></path><path d="M5.394 6.813l1.414-1.415l3.506 3.506L8.9 10.318z" fill="currentColor"></path><path d="M2 15.005h5v2H2z" fill="currentColor"></path><path d="M5.394 25.197L8.9 21.691l1.414 1.415l-3.506 3.505z" fill="currentColor"></path><path d="M15 25.005h2v5h-2z" fill="currentColor"></path><path d="M21.687 23.106l1.414-1.415l3.506 3.506l-1.414 1.414z" fill="currentColor"></path><path d="M25 15.005h5v2h-5z" fill="currentColor"></path><path d="M21.687 8.904l3.506-3.506l1.414 1.415l-3.506 3.505z" fill="currentColor"></path><path d="M15 2.005h2v5h-2z" fill="currentColor"></path></svg><svg style="display:none;" class="icon" focusable="false" viewBox="0 0 32 32"><path d="M13.502 5.414a15.075 15.075 0 0 0 11.594 18.194a11.113 11.113 0 0 1-7.975 3.39c-.138 0-.278.005-.418 0a11.094 11.094 0 0 1-3.2-21.584M14.98 3a1.002 1.002 0 0 0-.175.016a13.096 13.096 0 0 0 1.825 25.981c.164.006.328 0 .49 0a13.072 13.072 0 0 0 10.703-5.555a1.01 1.01 0 0 0-.783-1.565A13.08 13.08 0 0 1 15.89 4.38A1.015 1.015 0 0 0 14.98 3z" fill="currentColor"></path></svg></button><form class="search-box" role="search"><input type="search" placeholder="Search" autocomplete="off" spellcheck="false" value><!----></form></div></header><!--]--><div class="sidebar-mask"></div><!--[--><aside class="sidebar"><nav class="navbar-items"><!--[--><div class="navbar-item"><a href="/web/" class="" aria-label="Web基础"><!--[--><!--]--> Web基础 <!--[--><!--]--></a></div><div class="navbar-item"><a href="/vue/" class="" aria-label="Vue相关"><!--[--><!--]--> Vue相关 <!--[--><!--]--></a></div><div class="navbar-item"><a href="/network/" class="" aria-label="计算机网络"><!--[--><!--]--> 计算机网络 <!--[--><!--]--></a></div><div class="navbar-item"><a href="/api/" class="router-link-active" aria-label="后端"><!--[--><!--]--> 后端 <!--[--><!--]--></a></div><div class="navbar-item"><a href="/interview/" class="" aria-label="2022面经"><!--[--><!--]--> 2022面经 <!--[--><!--]--></a></div><div class="navbar-item"><a class="external-link" href="https://github.com/jiqiangzhu/jiqiangzhu.github.io" rel="noopener noreferrer" target="_blank" aria-label="Github"><!--[--><!--]--> Github <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></div><!--]--></nav><!--[--><!--]--><ul class="sidebar-items"><!--[--><li><p tabindex="0" class="sidebar-item sidebar-heading active">服务器相关 <!----></p><!--[--><ul style="" class="sidebar-item-children"><!--[--><li><a aria-current="page" href="/api/express-deploy.html" class="router-link-active router-link-exact-active router-link-active sidebar-item active" aria-label="Express部署到腾讯云服务器"><!--[--><!--]--> Express部署到腾讯云服务器 <!--[--><!--]--></a><!--[--><ul style="" class="sidebar-item-children"><!--[--><li><a aria-current="page" href="/api/express-deploy.html#nginx" class="router-link-active router-link-exact-active sidebar-item" aria-label="nginx⭐"><!--[--><!--]--> nginx⭐ <!--[--><!--]--></a><!----></li><!--]--></ul><!--]--></li><li><a href="/api/node.html" class="sidebar-item" aria-label="node.md"><!--[--><!--]--> node.md <!--[--><!--]--></a><!----></li><!--]--></ul><!--]--></li><!--]--></ul><!--[--><!--]--></aside><!--]--><!--[--><main class="page"><!--[--><!--]--><div class="theme-default-content"><!--[--><h1 id="express部署到腾讯云服务器" tabindex="-1"><a class="header-anchor" href="#express部署到腾讯云服务器" aria-hidden="true">#</a> Express部署到腾讯云服务器</h1><ol><li>将本地的<code>express</code>项目上传至<code>github</code>；</li><li>云服务器上安装<code>git</code>，拉取项目至指定目录</li><li>安装<code>node</code>，与本地的版本最好保持一致，避免出现问题</li><li>安装<code>nrm</code>管理镜像源</li></ol><div class="language-bash ext-sh line-numbers-mode"><pre class="language-bash"><code><span class="token comment"># 全局安装nrm,使用nrm管理镜像</span>
+<span class="token function">npm</span> <span class="token function">install</span> -g nrm
+<span class="token comment"># 列出所有镜像</span>
+nrm <span class="token function">ls</span>
+  <span class="token comment">#npm ---------- https://registry.npmjs.org/</span>
+  <span class="token comment">#yarn --------- https://registry.yarnpkg.com/</span>
+  <span class="token comment">#tencent ------ https://mirrors.cloud.tencent.com/npm/</span>
+  <span class="token comment">#cnpm --------- https://r.cnpmjs.org/</span>
+  <span class="token comment">#taobao ------- https://registry.npmmirror.com/</span>
+  <span class="token comment">#npmMirror ---- https://skimdb.npmjs.com/registry/</span>
+nrm use taobao
+
+<span class="token comment"># 自定义镜像</span>
+nrm <span class="token function">add</span> taobao1 https://registry.npm.taobao.org/
+nrm use taobao1
+
+<span class="token comment"># 查看当前npm所有配置</span>
+<span class="token function">npm</span> config <span class="token function">ls</span> -l
+<span class="token comment"># 查看npm当前镜像</span>
+<span class="token function">npm</span> get registry
+</code></pre><div class="line-numbers" aria-hidden="true"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br></div></div><ol start="5"><li>进入项目目录，执行<code>npm install</code>安装依赖</li><li><code>node app.js</code>尝试启动，无误后继续，有错误请排查</li><li>使用宝塔面板，傻瓜式操作，安装<code>pm2</code>管理器，<code>Nginx</code>反向代理，<code>PM2</code>添加启动项目，配置映射指向一个已经配置过<code>DNS</code>解析的域名（需要在云服务器控制台<code>DNSPod</code>中进行配置），可以🔥申请一个免费的<code>SSL</code>证书，到期后重新申请，就可以使用<code>HTTPS</code>进行安全访问了</li><li>浏览器中输入步骤7中配置的域名，<strong>不需要输入端口</strong>，就可以进行正常访问了</li></ol><h2 id="nginx" tabindex="-1"><a class="header-anchor" href="#nginx" aria-hidden="true">#</a> nginx⭐</h2><p>不需要输入端口的原理</p><ul><li><code>HTTP</code>默认<code>80</code>端口，<code>HTTPS</code>默认<code>443</code>端口，这两个端口在服务器的防火墙中是默认放开的，即如果你想访问服务器的某个端口，需要在防火墙中将其放开</li><li><code>Nginx</code>反向代理，监听<code>80 443</code>端口，<code>server_name</code>就是浏览器中要访问的域名，在<code>nginx</code>中使用<code>include</code>引入了这里的配置<code>include /www/server/panel/vhost/nginx/*.conf;</code></li></ul><div class="language-text ext-text line-numbers-mode"><pre class="language-text"><code>server
+{
+    listen 80;
+	listen 443 ssl http2;
+    server_name qg-blog-api.blairq.top;
+    index index.php index.html index.htm default.php default.htm default.html;
+    root /home/qg-blog/Blog/blog-api;
+    
+    #SSL-START SSL相关配置，请勿删除或修改下一行带注释的404规则
+    #error_page 404/404.html;
+    ssl_certificate    /www/server/panel/vhost/cert/qg-blog-api.blairq.top/fullchain.pem;
+    ssl_certificate_key    /www/server/panel/vhost/cert/qg-blog-api.blairq.top/privkey.pem;
+    ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3;
+    ssl_ciphers EECDH+CHACHA20:EECDH+CHACHA20-draft:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+    add_header Strict-Transport-Security &quot;max-age=31536000&quot;;
+    error_page 497  https://$host$request_uri;
+
+    #SSL-END
+    
+    #ERROR-PAGE-START  错误页配置，可以注释、删除或修改
+    #error_page 404 /404.html;
+    #error_page 502 /502.html;
+    #ERROR-PAGE-END
+    
+    #PHP-INFO-START  PHP引用配置，可以注释或修改
+    #清理缓存规则
+
+    location ~ /purge(/.*) {
+        proxy_cache_purge cache_one $host$1$is_args$args;
+        #access_log  /www/wwwlogs/qg-blog-api.blairq.top_purge_cache.log;
+    }
+	#引用反向代理规则，注释后配置的反向代理将无效
+	include /www/server/panel/vhost/nginx/proxy/qg-blog-api.blairq.top/*.conf;
+
+	include enable-php-00.conf;
+    #PHP-INFO-END
+    
+    #REWRITE-START URL重写规则引用,修改后将导致面板设置的伪静态规则失效
+    include /www/server/panel/vhost/rewrite/qg-blog-api.blairq.top.conf;
+    #REWRITE-END
+    
+    #禁止访问的文件或目录
+    location ~ ^/(\.user.ini|\.htaccess|\.git|\.svn|\.project|LICENSE|README.md)
+    {
+        return 404;
+    }
+    
+    #一键申请SSL证书验证目录相关设置
+    location ~ \.well-known{
+        allow all;
+    }
+    
+    access_log  /www/wwwlogs/qg-blog-api.blairq.top.log;
+    error_log  /www/wwwlogs/qg-blog-api.blairq.top.error.log;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br></div></div><ul><li>引用代理规则<code>include /www/server/panel/vhost/nginx/proxy/qg-blog-api.blairq.top/*.conf;</code></li><li>反向代理配置，这里指向本地项目启动所指向的端口<code>3000</code>，⭐如果改动了此配置文件，需要重启<code>Nginx</code>才能生效</li></ul><div class="language-text ext-text line-numbers-mode"><pre class="language-text"><code>#PROXY-START/
+location  ~* \.(gif|png|jpg|css|js|woff|woff2)$
+{
+    proxy_pass http://127.0.0.1:3000;
+    proxy_set_header Host 127.0.0.1;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header REMOTE-HOST $remote_addr;
+    expires 12h;
+}
+location /
+{
+    proxy_pass http://127.0.0.1:3000;
+    proxy_set_header Host 127.0.0.1;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header REMOTE-HOST $remote_addr;
+    
+    add_header X-Cache $upstream_cache_status;
+    
+    #Set Nginx Cache
+    
+    	add_header Cache-Control no-cache;
+}
+
+#PROXY-END/
+</code></pre><div class="line-numbers" aria-hidden="true"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br></div></div><!--]--></div><footer class="page-meta"><!----><div class="meta-item last-updated"><span class="meta-item-label">Last Updated: </span><!----></div><div class="meta-item contributors"><span class="meta-item-label">Contributors: </span><span class="meta-item-info"><!--[--><!--[--><span class="contributor" title="email: Jiqiang.zhu01@gmail.com">Jiqiangzhu</span><!----><!--]--><!--]--></span></div></footer><nav class="page-nav"><p class="inner"><!----><span class="next"><a href="/api/node.html" class="" aria-label="node.md"><!--[--><!--]--> node.md <!--[--><!--]--></a></span></p></nav><!--[--><!--]--></main><!--]--></div><!----><!--]--></div>
+    <script type="module" src="/assets/app.0f26bafb.js" defer></script>
+  </body>
+</html>

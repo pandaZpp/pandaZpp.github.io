@@ -1,0 +1,1 @@
+const a={key:"v-7449995c",path:"/web/closure.html",title:"Javascript\u95ED\u5305",lang:"zh-CN",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:1644329886e3,contributors:[{name:"JiqiangZhu",email:"jiqiang.zhu01@gmail.com",commits:1},{name:"Jiqiangzhu",email:"Jiqiang.zhu01@gmail.com",commits:1}]},filePathRelative:"web/closure.md"};export{a as data};

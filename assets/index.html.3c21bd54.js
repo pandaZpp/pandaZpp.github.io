@@ -1,0 +1,1 @@
+const e={key:"v-744e6dd4",path:"/web/",title:"\u7B80\u4ECB",lang:"zh-CN",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:1644329916e3,contributors:[{name:"JiqiangZhu",email:"jiqiang.zhu01@gmail.com",commits:1},{name:"Jiqiangzhu",email:"Jiqiang.zhu01@gmail.com",commits:1}]},filePathRelative:"web/index.md"};export{e as data};
